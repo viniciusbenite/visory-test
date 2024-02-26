@@ -1,6 +1,6 @@
 # Visory
 
-This project is for [Visory engineering challenge.](https://github.com/VisoryPlatform/engineering-challenge?tab=readme-ov-file) It a small application built 
+This project is for [Visory engineering challenge.](https://github.com/VisoryPlatform/engineering-challenge?tab=readme-ov-file) It is a small application built 
 in Angular to fetch events from TicketMaster discovery API.
 
 In this application, it's possible to filter by Country, city, start and end date. The cities are based on the country selected 
