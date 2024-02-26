@@ -17,7 +17,7 @@ To run it, use Angular CLI or Docker:
 
 ```docker run -p 4300:4200 angular-app```
 
-Then navigate to http://localhost:8080/
+Then navigate to http://localhost:4200/
 
 ### Angular CLI
 ```ng serve```
