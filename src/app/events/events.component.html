@@ -1,0 +1,94 @@
+<div class="container">
+
+  <mat-toolbar color="primary" id="events-toolbar">
+    <span class="fill-remaining-space">Search for events</span>
+  </mat-toolbar>
+
+  <div class="form-container" id="form-container">
+      <form [formGroup]="form" (ngSubmit)="getEvents()" id="form-group">
+
+        <mat-form-field>
+          <mat-label>Country Code</mat-label>
+          <mat-select formControlName="countryCode" aria-label="Country Code" (selectionChange)="getCities($event.value)" id="select-country">
+            <mat-option *ngFor="let country of countryCodes" [value]="country.code">{{country.name}} ({{country.code}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>City</mat-label>
+          <input matInput aria-label="City" formControlName="city" [matAutocomplete]="auto">
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let city of filteredCities | async" [value]="city" id="select-city">
+              {{city}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+
+        <mat-form-field>
+          <mat-label>Start Date</mat-label>
+          <input matInput [matDatepicker]="startPicker" formControlName="startDateTime" aria-label="Start Date">
+          <mat-datepicker-toggle matSuffix [for]="startPicker" id="date-picker-start"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>End Date</mat-label>
+          <input matInput [matDatepicker]="endPicker" formControlName="endDateTime" aria-label="End Date">
+          <mat-datepicker-toggle matSuffix [for]="endPicker" id="date-picker-end"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+        </mat-form-field>
+
+        <button id="submit-btn" class="submit-button" mat-raised-button color="primary" type="submit" [disabled]="!form.valid">Submit</button>
+      </form>
+  </div>
+
+  <div class="table-container">
+    <mat-table [dataSource]="events" *ngIf="events.length > 0; else noEventsMessage" class="mat-elevation-z8" >
+
+      <ng-container matColumnDef="id" id="col-id">
+        <mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.id}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name" id="col-name">
+        <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="type" id="col-type">
+        <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.type}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="startDate" id="col-start-date">
+        <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.startDate}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="startTime" id="col-start-time">
+        <mat-header-cell *matHeaderCellDef> Start Time </mat-header-cell>
+        <mat-cell *matCellDef="let event"> {{event.startTime}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="url" id="col-url">
+        <mat-header-cell *matHeaderCellDef> URL </mat-header-cell>
+        <mat-cell *matCellDef="let event"> <a [href]="event.url" target="_blank">{{event.url}}</a> </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="getEventDetails(row.id)" style="cursor: pointer"></mat-row>
+    </mat-table>
+
+    <ng-template #noEventsMessage>
+      <p>No events found.</p>
+    </ng-template>
+
+    <mat-paginator
+      id="paginator"
+      [length]="totalEvents"
+      [pageSize]="20"
+      (page)="onPageChange($event)">
+    </mat-paginator>
+  </div>
+</div>
